@@ -13,7 +13,9 @@ const ServiceDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = `${import.meta.env.VITE_APP_SECRET_SERVER_SIDE}/resort/${id}`;
+      const url = `${
+        import.meta.env.VITE_APP_SECRET_SERVER_SIDE
+      }/service/${id}`;
       try {
         const response = await axios.get(url);
         const data = response.data;
@@ -55,7 +57,25 @@ const ServiceDetail = () => {
           </div>
           <div className="flex flex-col items-start gap-5">
             <p className="headline">{item.name}</p>
-            <div className="flex group">
+            <div className="flex flex-wrap items-center justify-center">
+              <p className="font-semibold">Time:</p>
+              <div className="flex group items-center hover:cursor-pointer">
+                <p className="font-semibold text-lg">
+                  {item?.spendingTime?.day}
+                </p>
+                <p>Days</p>
+              </div>
+              <div className="flex group items-center hover:cursor-pointer">
+                <p className="font-semibold text-lg">
+                  {item?.spendingTime?.night}
+                </p>
+                <p>Nights</p>
+              </div>
+            </div>
+            <div
+              className="flex group tooltip"
+              data-tip="It's Mainly Our Hotel Location"
+            >
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +121,7 @@ const ServiceDetail = () => {
               <p className="text-amber-600 font-bold group-hover:text-rose-600 animation">
                 {item?.price}
               </p>
-              <p>Per Night</p>
+              <p>Per Adult</p>
             </div>
 
             <Link

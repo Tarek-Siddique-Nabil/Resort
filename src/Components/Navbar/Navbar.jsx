@@ -48,37 +48,39 @@ const Navbar = () => {
       >
         <div className="md:w-1/2 w-full flex md:gap-10 items-center justify-between md:justify-normal">
           <div className="md:w-10 w-6 md:h-10 h-6">
-            <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="md:w-10 w-6 md:h-10 h-6"
-            >
-              <motion.path
-                variants={icon}
-                initial="hidden"
-                animate="visible"
-                transition={{
-                  default: {
-                    duration: 1,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    repeatDelay: 2.5,
-                  },
-                  fill: {
-                    duration: 3,
-                    ease: [1, 0, 0.8, 1],
-                    repeat: Infinity,
-                    repeatDelay: 2.5,
-                  },
-                }}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-              />
-            </motion.svg>
+            <Link to="/">
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="md:w-10 w-6 md:h-10 h-6"
+              >
+                <motion.path
+                  variants={icon}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{
+                    default: {
+                      duration: 1,
+                      ease: "easeInOut",
+                      repeat: Infinity,
+                      repeatDelay: 2.5,
+                    },
+                    fill: {
+                      duration: 3,
+                      ease: [1, 0, 0.8, 1],
+                      repeat: Infinity,
+                      repeatDelay: 2.5,
+                    },
+                  }}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                />
+              </motion.svg>
+            </Link>
           </div>
           <div className="relative">
             <motion.div
@@ -186,7 +188,11 @@ const Navbar = () => {
                     <li>
                       <a className="justify-between">Profile</a>
                     </li>
-
+                    {user.email && (
+                      <li>
+                        <Link to="/manage">Manage</Link>
+                      </li>
+                    )}
                     <li>
                       <button onClick={() => logOut()}>Logout</button>
                     </li>
@@ -247,6 +253,7 @@ const Navbar = () => {
               >
                 Service
               </NavLink>
+
               <NavLink
                 className="btn btn-ghost hover:btn-primary focus:btn-error animation"
                 to="/about"

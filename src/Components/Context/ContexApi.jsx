@@ -24,7 +24,24 @@ export const ContextProvider = ({ children }) => {
   const googleProvider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        if (user) {
+          toast.success("Your Account Create Successfully", {
+            position: "top-center",
+            duration: 1500,
+          });
+          setUser(user);
+          navigate("/signin");
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
   };
   const signIn = (body) => {
     const { email, password } = body;
@@ -33,17 +50,18 @@ export const ContextProvider = ({ children }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential?.user;
-        setUser(user);
+
         if (user?.email) {
+          setUser(user);
           localStorage.setItem("email", user?.email);
+          toast.success("User Login Successful", {
+            position: "top-center",
+            duration: 1500,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         }
-        toast.success("User Login Successful", {
-          position: "top-center",
-          duration: 1500,
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -53,7 +71,38 @@ export const ContextProvider = ({ children }) => {
   };
 
   const signInWithGoogle = () => {
-    return signInWithPopup(auth, googleProvider);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        if (user?.email) {
+          setUser(user);
+          localStorage.setItem("email", user?.email);
+          toast.success("User Login Successful", {
+            position: "top-center",
+            duration: 1500,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        }
+
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   const logOut = () => {
@@ -76,7 +125,7 @@ export const ContextProvider = ({ children }) => {
   // get all service
   useEffect(() => {
     setLoading(true);
-    const url = `${import.meta.env.VITE_APP_SECRET_SERVER_SIDE}/resort`;
+    const url = `${import.meta.env.VITE_APP_SECRET_SERVER_SIDE}/service`;
     const fetchData = async () => {
       setLoading(true);
       try {
